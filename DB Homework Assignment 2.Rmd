@@ -1,0 +1,162 @@
+---
+title: "DB Homework 2"
+author: "Derek Bornath"
+date: "16/01/2020"
+output: html_document
+---
+
+#Scenario 1:
+#A)
+#Null hypothesis: There is no change in shrimp fishing quantities between the two years
+#Alternate hypothesis:There is a change shrimp fishing quantities between the two years
+
+#B)
+#Histogram
+```{r}
+catch2009= c(91900,95200,61900,73600,114300,117000,129500,74200,112700,152100,90700,89400,127500,142200)
+catch2010=c(82900,86700,46900,41300,91600,100400,128400,55900,101700,139100,79300,76100,114100,139800)
+```
+
+```{r}
+hist(catch2010-catch2009, main='Difference in Schrimp Caught between 2010 and 2009', ylab= 'Frequency Observed', xlab='Difference in Shrimp Caught')
+```
+
+#C)
+#I will be performing a paired t-test as that data is of two samples that are linked, and it is two tailed as the data could has the ability to increase or decrease between the two years.
+
+#D)
+#Run the test and display the summary output.
+```{r}
+t.test(catch2010, catch2009, paired=TRUE)
+```
+
+#E)
+#Observed t-value seen above is -6.3808
+#Critical t-value calculated below
+```{r}
+qt(0.025,13)
+```
+#Therefore the critical t-value is -2.160369. Since the observed t-value is negative I used the negative side of the distribution for the two-tailed data (0.025).
+
+#F)
+#The summary output indicated a paired t-test significance of p=2.415e-05 and t-observed being further away from zero than the t-critical we would reject the null hypothesis and state that there is a true difference in means not equal to 0. Therefore there is a significant change in the shrimp fishing catch quantities between years. The data indicates significance moving in the negative direction as there are reduced numbers in 2010 versus 2009.
+
+
+
+#Senario 2:
+#A)
+#Null hypothesis: the total phosphorous is not greater than the maximum of 15ug/L
+#Alternative hypothesis: the total phosphorous is greater than the maximum of 15ug/L
+
+#B)
+#Create a histogram of data
+```{r}
+phosphorous=c(18.4,12.9,15.3,18.3,15.6,23.3,16.5,12.3,24.6,16.2)
+```
+```{r}
+hist(phosphorous, main="Total Phosphorous in Lake Erie", xlab='Concentration of Phosphorous', ylab='Observed Frequency')
+```
+
+#C)
+#I am going to run a two-tailed, one sample t-test because we are comparing the a single data set to a specific score (15 ug/L). It is two-tailed as there is values in either direction of the specific score, however we are only concerned with concentrations greater than 15ug/L as that is stated as the maximum phosphorous concentration.
+
+#D) Run the test and display the summary output
+```{r}
+t.test(phosphorous, mu=15)
+```
+#the p-value is 0.09794 however we would divide this by two since we are only concerned with the positive side of the two-tailed distribution, making the p-value now 0.04897.
+
+
+#E)
+#State the critical and observed value of the test statistics.
+#The observed t value is 1.8462
+```{r}
+qt(0.975, 9)
+```
+#The critical t value is 2.262157. We did it to the 0.975 as a two tailed because the concentration could increase or decrease, but we are only concerned with the positive direction of change that is occuring with concentrations greater than 15ug/L.
+
+#F)The intial p-value was of less than 0.05 (p=0.09794)calculated in the summary output above, however since we are only concerned with change in one direction (greater than 15ug/L), we would divide the p-value in half producing a value of p=0.04897. We now have statistical significance and can state that the mean is not equal to 15. As a result we would reject the null hypothesis that the phosphorous concentration has no change from the mean provided.
+
+
+#Senario 3:
+#A)
+#Null Hypothesis: Growth rate of salmon does not differ based on carnivorous or vegetarian diet.
+#Alternative Hypothesis: Growth rate does differ based on carnivorous or vegetarian diet.
+
+#B)
+#Create a histogram
+```{r}
+carnivorous=c(2.3,1.8,1.9,1.8,2.1,2.3,2.0,2.2,2.2,1.5,1.8,2.1,2.3,2.2,2.3)
+vegetarian=c(1.6,1.1,0.7,1.0,1.0,0.9,1.2,0.8,0.9,0.6,0.7,0.6,0.8,0.8,1.1)
+```
+
+```{r}
+hist(carnivorous-vegetarian, main='Comparison of Carnivorous vs Vegetarian', ylab="Observed Frequency", xlab="Salmon Growth Rate Difference")
+```
+
+#C)
+#I am going to run an independent two sample two tailed t-test to evaluate if the two samples have different growth rates due to diet.
+
+#D) 
+#Running two sample t-test and display summary output
+```{r}
+t.test(carnivorous,vegetarian)
+```
+#p=1.008e-12 therefore significant difference and the means are not equal to zero
+
+#E)
+#State the critical t and observed t values
+#As stated above the observed t is 12.237
+#Critical t value calculated below
+```{r}
+qt(0.975,28)
+```
+#Therefore critical t-value is 2.048407
+
+#F)
+#Due to the critical t being closer to zero than the observed t and a p-value less than 0.05, we would reject the null hypothesis and state that there is a significant difference in growth rate of the salmon depending on the diet.
+
+
+#Senario 4:
+#A)
+#Null hypothesis:There is no interaction between symptoms of PCB poisoning and trophic level.
+#Alternate hypothesis: There is an interaction between symptoms of PCB poisoning and trophic level.
+
+#B)
+#Create a histogram
+```{r}
+first.trophic=c(133,100,17)
+top.predator=c(4,61,35)
+dat=data.frame(first.trophic,top.predator)
+```
+
+```{r}
+dat
+```
+
+```{r}
+hist(dat$first.trophic, main='St.Lawrence First Trophic Level PCB Exposure', xlab="PCB Poisoning Outcome", ylab="Frequency Observed")
+hist(dat$top.predator, main='St.Lawrence Top Predator PCB Exposure', xlab="PCB Poisoning Outcome", ylab="Frequency Observed")
+```
+
+#C)
+#I am going to run a chi square test to determine if there is an interaction or independence between the symptoms of PCB and trophic level.
+
+#D)
+#Run the test and displaying the summary outputs
+```{r}
+chisq.test(dat)
+```
+#p<2.2e-16 indicating satistical significance at a 95% confidence interval.
+
+
+#E)
+#The observed x^2 value is 89.253.
+#The critical x^2 value is calculated below.
+```{r}
+qchisq(0.95,2)
+```
+#Critical x^2 is 5.991465
+
+#F)
+#Therefore since the p-value is less than 0.05 (p<2.2e-15) and the observed x^2 value (89.253) is greater than the critical x^2 value (5.991465) we would reject the null hypothesis and state that an interaction does occur between PCB symptoms and trophic level.
